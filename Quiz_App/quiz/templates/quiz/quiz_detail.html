@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ quiz.title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            padding: 0;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        p {
+            margin-bottom: 20px;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        h3 {
+            color: #555;
+            margin-top: 20px;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .no-questions {
+            color: #999;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .greeting {
+            text-align: center;
+            font-size: 20px;
+            color: #333;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ quiz.title }}</h1>
+    <p class="greeting">Hey, {{ username }}</p>
+    <p>{{ quiz.description }}</p>
+
+
+    {% if quiz.questions.all %}
+        <form method="post">
+            {% csrf_token %}
+            {% for question in quiz.questions.all %}
+                <h3>{{ question.text }}</h3>
+                {% for choice in question.choices.all %}
+                    <input type="radio" name="question_{{ question.id }}" value="{{ choice.id }}"> {{ choice.text }}<br>
+                {% endfor %}
+                <br>
+            {% endfor %}
+            
+            <button type="submit">Submit Quiz</button>
+        </form>
+    {% else %}
+        <p class="no-questions">No questions found for this quiz.</p>
+    {% endif %}
+</body>
+</html>
